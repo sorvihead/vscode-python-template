@@ -51,17 +51,6 @@ make clean-postgres   # Stop and remove PostgreSQL container + volume
 make setup-vscode     # Copy launch configurations from templates
 ```
 
-## 🤖 GitHub Copilot Integration
-
-This template includes comprehensive Copilot instructions that enforce modern Python patterns:
-
-- **Python 3.13+ standards** - Built-in types, no legacy imports
-- **Modern syntax** - TypeVars with `type` statement, proper decorators
-- **Best practices** - Protocol vs ABC, structured logging, domain modeling  
-- **Context-aware** - Specialized instructions for different code areas
-
-Copilot will automatically apply these patterns when `github.copilot.chat.codeGeneration.useInstructionFiles` is enabled in VS Code.
-
 ### Docker Production
 ```bash
 make docker-build     # Build production image (python-template:latest)

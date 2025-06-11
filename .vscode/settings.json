@@ -119,7 +119,7 @@
     "pgsql.connections": [
         // Your connections here
     ],
-    // Copilot settings
+    // GitHub Copilot settings
     "github.copilot.enable": {
         "*": true,
         "python": true,
@@ -127,11 +127,14 @@
         "makefile": true,
         "yaml": true,
         "json": true,
+        "jsonc": true,
         "markdown": true,
+        "toml": true,
+        "shellscript": true
     },
     "github.copilot.chat.codeGeneration.useInstructionFiles": true,
     "github.copilot.advanced": {
         "useLanguageServer": true
     },
-    "github.copilot.editor.enableCodeActions": true,
+    "github.copilot.editor.enableCodeActions": true
 }

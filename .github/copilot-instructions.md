@@ -1,68 +1,84 @@
-# Python Web Development Template Instructions
+<!-- filepath: /Users/pavelnovojdarskij/Projects/python/vscode-python-template/.github/copilot-instructions.md -->
+# Python Development Instructions
 
-You are working on a modern Python web development project. Follow these coding standards and practices consistently.
+Generate modern Python 3.13+ code following these standards:
 
-## Project Standards
+## Core Requirements
 
-Use Python 3.13+ features and modern syntax.
-Follow PEP 8 style guide strictly.
-Use uv for dependency management instead of pip.
-Apply Ruff for linting and formatting.
-Use Pyright for type checking.
-Write tests with pytest.
+- Use Python 3.13+ syntax with built-in generics and `type` statements
+- Add comprehensive type hints to all functions, methods, and class attributes
+- Use built-in types (list, dict, tuple) instead of importing from typing
+- Import from typing when needed for types not available as built-ins
+- Follow PEP 8 style guide strictly
+- Use structured logging with logger.error(exc_info=True) instead of logger.exception()
 
-## Type Annotations
+## Type System
 
-Use built-in types for Python 3.11+ without importing from typing.
-Import from typing only for complex types like Any, Iterable, Protocol.
-Add type hints to all functions, methods, and class attributes.
-Don't add type hints to simple variables unless the type is unclear.
+### Modern Generic Syntax
+- Use type statement for aliases: `type ResponseDict[T] = dict[str, T]`
+- Use generic classes with bounds: `class Repository[T: BaseModel]:`
+- Avoid legacy TypeVar imports
 
-## TypeVars
+### Interface Design
+- Use Protocol for pure interfaces without state
+- Use ABCMeta for base classes with state/behavior
+- Mark abstract methods with @abstractmethod
 
-Use Python 3.13+ generic syntax without importing TypeVar.
-Use the new `type` statement for type aliases and generic type definitions.
-Apply proper bounds and constraints using modern syntax.
+### Decorator Type Hints
+- Add type hints to every decorator function
+- Use proper generic typing for decorators that preserve function signatures
+- Apply appropriate return type annotations for decorated functions
 
-## Decorators
+## Function Guidelines
 
-Add type hints to every decorator function.
-Use proper generic typing for decorators that preserve function signatures.
-Apply appropriate return type annotations for decorated functions.
-
-## Interfaces and Abstract Classes
-
-Use typing.Protocol instead of abc if it's an interface without state and base behavior.
-Use metaclass=ABCMeta instead of ABC if it's a base class with state and/or base behavior. Base methods should be covered with abstractmethod decorator.
-
-## Error Handling
-
-Use logger.error() with exc_info=True instead of logger.exception().
-Prefer specific exception types over generic Exception.
-Always log errors with meaningful context.
-Use logger instead of print for output and debugging.
-
-## Modern Python Features
-
-Use pattern matching for complex conditionals and sum types.
-Omit case _ when all cases are explicitly covered.
-Prefer match statements over long if-elif chains.
-Use dataclasses or Pydantic for data structures.
+- Keep functions under 40 lines
+- Use clear, descriptive names
+- Include comprehensive docstrings with Args, Returns, Raises
+- Add type hints to all parameters and return values
+- Use pattern matching for complex conditionals
+- Prefer comprehensions over for-loops when appropriate
 
 ## Code Organization
 
-Use clear, descriptive function and variable names.
-Keep functions small and focused on single responsibility.
-Organize imports: standard library, third-party, local.
-Add docstrings to all public APIs.
-Use __init__.py files to define package structure.
-Use __main__.py for executable modules.
-Define __all__ to specify public module APIs.
+### Import Order
+- Follow Ruff import organization rules
+
+### Package Structure
+- Use __init__.py to define package APIs
+- Define __all__ for public modules
+- Use __main__.py for executable modules
+- Add docstrings to all public functions and classes
 
 ## Web Development Patterns
 
-Follow RESTful API design principles.
-Use Pydantic models for data validation.
-Apply security best practices for web applications.
-Use domain-driven design principles for data modeling.
-When generating code, always include type hints for functions and methods, use modern Python syntax, handle errors appropriately with logging, follow existing project patterns, and keep code readable and maintainable.
+- Use Pydantic models for data validation
+- Implement repository pattern for data access
+- Follow domain-driven design principles
+- Apply proper error handling with status codes
+- Implement dependency injection for services
+
+## Testing
+
+- Write tests with pytest
+- Use fixtures for test data
+- Include integration tests for critical paths
+- Maintain high test coverage
+- Test error conditions and edge cases
+
+## AI Assistant Behavior
+
+- Be more skeptical and ask clarifying questions before generating code
+- When requirements are unclear or incomplete, ask for specific details
+- Suggest multiple approaches when appropriate and explain trade-offs
+- Question assumptions and propose better alternatives when relevant
+- Always verify understanding of the task before proceeding
+
+## Available VS Code Tasks
+
+When suggesting development workflows, reference these configured tasks:
+- **Ruff check**: Linting with auto-fix
+- **Ruff format**: Code formatting
+- **Pyright check**: Type checking
+- All tasks are available via VS Code Command Palette or terminal
+
+When generating code, always include type hints, use modern Python syntax, handle errors with logging, and follow these architectural patterns.
