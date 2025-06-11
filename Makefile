@@ -1,9 +1,29 @@
-.PHONY: dev-setup install-uv sync-deps activate-venv setup-postgres setup-vscode clean clean-postgres
+.PHONY: dev-setup install-system-deps install-uv sync-deps activate-venv setup-postgres setup-vscode clean clean-postgres docker-build docker-run docker-stop docker-clean
 
 # Main development setup target
-dev-setup: install-uv sync-deps setup-postgres setup-vscode
+dev-setup: install-system-deps install-uv sync-deps setup-postgres setup-vscode
 	@echo "Development environment setup complete!"
 	@echo "To activate the virtual environment, run: source .venv/bin/activate"
+
+# Install system dependencies for psycopg
+install-system-deps:
+	@echo "Installing system dependencies..."
+	@if [ "$$(uname)" = "Darwin" ]; then \
+		echo "Detected macOS"; \
+		echo "Installing PostgreSQL (includes libpq)..."; \
+		brew install postgresql@17; \
+	elif [ "$$(uname)" = "Linux" ]; then \
+		echo "Detected Linux"; \
+		if command -v apt-get >/dev/null 2>&1; then \
+			echo "Using apt (Debian/Ubuntu)"; \
+			sudo apt-get update; \
+			sudo apt-get install -y libpq-dev python3-dev build-essential; \
+		else \
+			echo "Warning: Only Debian/Ubuntu supported. Please install libpq-dev manually."; \
+		fi; \
+	else \
+		echo "Warning: Only macOS and Debian/Ubuntu supported."; \
+	fi
 
 # Install uv if it doesn't exist
 install-uv:
@@ -67,12 +87,71 @@ setup-postgres:
 setup-vscode:
 	@echo "Setting up VS Code configuration..."
 	@mkdir -p .vscode
-	@if [ -f "./.launch_templates/launch.example.json" ]; then \
-		cp ./.launch_templates/launch.example.json .vscode/launch.json; \
+	@if [ -f "./launch_templates/launch.example.json" ]; then \
+		cp ./launch_templates/launch.example.json .vscode/launch.json; \
 		echo "Copied launch configuration to .vscode/launch.json"; \
 	else \
-		echo "Warning: ./.launch_templates/launch.example.json not found"; \
+		echo "Warning: ./launch_templates/launch.example.json not found"; \
 	fi
+
+# Docker targets
+docker-build:
+	@echo "Building Docker image..."
+	@if command -v podman >/dev/null 2>&1; then \
+		echo "Using podman"; \
+		podman build -t python-template:latest .; \
+	elif command -v docker >/dev/null 2>&1; then \
+		echo "Using docker"; \
+		docker build -t python-template:latest .; \
+	else \
+		echo "Error: Neither podman nor docker found. Please install one of them."; \
+		exit 1; \
+	fi
+
+docker-run:
+	@echo "Running Docker container..."
+	@if command -v podman >/dev/null 2>&1; then \
+		echo "Using podman"; \
+		podman run -d --name python-template-app -p 8000:8000 python-template:latest; \
+	elif command -v docker >/dev/null 2>&1; then \
+		echo "Using docker"; \
+		docker run -d --name python-template-app -p 8000:8000 python-template:latest; \
+	else \
+		echo "Error: Neither podman nor docker found. Please install one of them."; \
+		exit 1; \
+	fi
+	@echo "Container started. Access at http://localhost:8000"
+
+docker-stop:
+	@echo "Stopping Docker container..."
+	@if command -v podman >/dev/null 2>&1; then \
+		echo "Using podman"; \
+		podman stop python-template-app 2>/dev/null || true; \
+	elif command -v docker >/dev/null 2>&1; then \
+		echo "Using docker"; \
+		docker stop python-template-app 2>/dev/null || true; \
+	else \
+		echo "Error: Neither podman nor docker found."; \
+		exit 1; \
+	fi
+
+docker-clean:
+	@echo "Cleaning Docker containers and images..."
+	@if command -v podman >/dev/null 2>&1; then \
+		echo "Using podman"; \
+		podman stop python-template-app 2>/dev/null || true; \
+		podman rm python-template-app 2>/dev/null || true; \
+		podman rmi python-template:latest 2>/dev/null || true; \
+	elif command -v docker >/dev/null 2>&1; then \
+		echo "Using docker"; \
+		docker stop python-template-app 2>/dev/null || true; \
+		docker rm python-template-app 2>/dev/null || true; \
+		docker rmi python-template:latest 2>/dev/null || true; \
+	else \
+		echo "Error: Neither podman nor docker found."; \
+		exit 1; \
+	fi
+	@echo "Docker cleanup complete!"
 
 # Stop and remove PostgreSQL container
 clean-postgres:
@@ -92,7 +171,7 @@ clean-postgres:
 	$$CONTAINER_CMD volume rm postgres-dev-data 2>/dev/null || true
 
 # Clean up everything
-clean: clean-postgres
+clean: clean-postgres docker-clean
 	@echo "Cleaning up development environment..."
 	@rm -rf .venv
 	@rm -f .vscode/launch.json
