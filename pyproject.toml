@@ -1,0 +1,28 @@
+[project]
+name = "vscode-python-template"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Pavel Novoidarskii", email = "sorvihead1@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.402",
+    "pytest>=8.4.0",
+    "ruff>=0.11.13",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "ANN", "C4"]
+ignore = ["ANN002", "ANN003", "ANN204"]

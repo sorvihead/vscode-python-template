@@ -1,0 +1,16 @@
+{
+    "venvPath": "",
+    "venv": ".venv",
+    "typeCheckingMode": "standard",
+    "reportUnnecessaryTypeIgnoreComment": "error",
+    "reportGeneralTypeIssues": "error",
+    "enableTypeIgnoreComments": false,
+    "reportPrivateImportUsage": true,
+    "pythonVersion": "3.13",
+    "include": [
+        "src",
+    ],
+    "exclude": [
+        "openapi"
+    ]
+}

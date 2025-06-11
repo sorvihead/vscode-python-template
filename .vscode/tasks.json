@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Ruff check",
+            "type": "shell",
+            "command": "ruff check src --fix",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$python"
+            ],
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Ruff format",
+            "type": "shell",
+            "command": "ruff format src",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$python"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "dependsOn": [
+                "Ruff check"
+            ]
+        },
+        {
+            "label": "Pyright check",
+            "type": "shell",
+            "command": "pyright",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$python"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "dependsOn": [
+                "Ruff format"
+            ]
+        }
+    ]
+}

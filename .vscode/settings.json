@@ -1,0 +1,113 @@
+{
+    // Python settings
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+    "debugpy.debugJustMyCode": false,
+    "python.testing.cwd": "${workspaceFolder}",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestPath": "${workspaceFolder}/.venv/bin/pytest",
+    "python.testing.pytestArgs": [
+        "-s",
+        "-vv",
+        // your test directories here
+    ],
+    "python.languageServer": "Pylance",
+    "python.analysis.aiCodeActions": {
+        "enabled": true,
+        "generateDocstring": true,
+        "generateSymbol": true,
+        "implementAbstractClasses": true,
+        "convertFormatString": true,
+    },
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoIndent": true,
+    "python.analysis.completeFunctionParens": true,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.importFormat": "absolute",
+    "python.analysis.fixAll": [
+        "source.convertImportFormat",
+        "source.unusedImports"
+    ],
+    "python.analysis.includeAliasesFromUserFiles": false,
+    "python.analysis.indexing": true,
+    "python.analysis.inlayHints.callArgumentNames": "partial",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.pytestParameters": true,
+    "python.analysis.inlayHints.variableTypes": false,
+    "python.analysis.languageServerMode": "full",
+    "python.analysis.userFileIndexingLimit": -1,
+    "python.analysis.enablePytestSupport": true,
+    "python.analysis.generateWithTypeAnnotation": true,
+    "python.analysis.gotoDefinitionInStringLiteral": true,
+
+    // Workbench Settings
+    "workbench.tree.enableStickyScroll": true,
+    "workbench.colorTheme": "One Monokai Python",
+
+    // Debugger settings
+    "debug.showVariableTypes": true,
+    "debug.inlineValues": "on",
+
+    // Explorer settings
+    "explorer.autoReveal": false,
+
+    // Editor settings
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.suggestSelection": "recentlyUsedByPrefix",
+    "editor.suggest.localityBonus": true,
+
+    // Terminal settings
+    // MacOS
+    "terminal.integrated.env.osx": {
+        "path": "/bin/zsh"
+    },
+    "terminal.integrated.profiles.osx": {
+        "zsh": {
+            "path": "/bin/zsh"
+        }
+    },
+    "terminal.integrated.defaultProfile.osx": "zsh",
+
+    // Linux
+    "terminal.integrated.env.linux": {
+        "path": "/bin/bash"
+    },
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "/bin/bash"
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "bash",
+    // charliermarsh.ruff settings
+    "ruff.enable": true,
+    "ruff.organizeImports": true,
+    "ruff.fixAll": true,
+    "ruff.codeAction.fixViolation": {
+        "enable": true
+    },
+    "ruff.path": [
+        "${workspaceFolder}/.venv/bin/ruff"
+    ],
+    "ruff.configuration": "${workspaceFolder}/pyproject.toml",
+
+    // JSON file lint settings
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+
+    // mutantdino.resourcemonitor settings
+    "resmon.show.cputemp": true,
+
+    // Files settings
+    "files.autoSave": "afterDelay",
+
+    // ms-ossdata.vscode-pgsql settings
+    "pgsql.connections": [
+        // Your connections here
+    ],
+}
