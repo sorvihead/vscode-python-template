@@ -18,7 +18,7 @@ This template provides a **pre-configured** Python development environment for *
 
 - **VS Code** (required)
 - **Python 3.13+**
-- **Docker Desktop**
+- **Container Engine** (Docker Desktop or Podman)
 
 ## 🚀 Quick Start
 
