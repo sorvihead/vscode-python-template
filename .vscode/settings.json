@@ -41,23 +41,18 @@
     "python.analysis.enablePytestSupport": true,
     "python.analysis.generateWithTypeAnnotation": true,
     "python.analysis.gotoDefinitionInStringLiteral": true,
-
     // Workbench Settings
     "workbench.tree.enableStickyScroll": true,
     "workbench.colorTheme": "One Monokai Python",
-
     // Debugger settings
     "debug.showVariableTypes": true,
     "debug.inlineValues": "on",
-
     // Explorer settings
     "explorer.autoReveal": false,
-
     // Editor settings
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.suggestSelection": "recentlyUsedByPrefix",
     "editor.suggest.localityBonus": true,
-
     // Terminal settings
     // MacOS
     "terminal.integrated.env.osx": {
@@ -69,7 +64,6 @@
         }
     },
     "terminal.integrated.defaultProfile.osx": "zsh",
-
     // Linux
     "terminal.integrated.env.linux": {
         "path": "/bin/bash"
@@ -91,7 +85,6 @@
         "${workspaceFolder}/.venv/bin/ruff"
     ],
     "ruff.configuration": "${workspaceFolder}/pyproject.toml",
-
     // JSON file lint settings
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -99,15 +92,46 @@
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-
     // mutantdino.resourcemonitor settings
     "resmon.show.cputemp": true,
-
     // Files settings
     "files.autoSave": "afterDelay",
-
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.ruff_cache": true,
+        ".venv": true
+    },
+    "files.associations": {
+        "*.py": "python",
+        "Dockerfile*": "dockerfile",
+        "*.toml": "toml"
+    },
+    // Search settings
+    "search.exclude": {
+        "**/.venv": true,
+        "**/__pycache__": true,
+        "**/*.pyc": true
+    },
     // ms-ossdata.vscode-pgsql settings
     "pgsql.connections": [
         // Your connections here
     ],
+    // Copilot settings
+    "github.copilot.enable": {
+        "*": true,
+        "python": true,
+        "dockerfile": true,
+        "makefile": true,
+        "yaml": true,
+        "json": true,
+        "markdown": true,
+    },
+    "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+    "github.copilot.advanced": {
+        "useLanguageServer": true
+    },
+    "github.copilot.editor.enableCodeActions": true,
 }
