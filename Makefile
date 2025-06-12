@@ -1,4 +1,4 @@
-.PHONY: dev-setup install-system-deps install-uv sync-deps activate-venv setup-postgres setup-vscode clean clean-postgres docker-build docker-run docker-stop docker-clean
+.PHONY: dev-setup install-system-deps install-uv sync-deps activate-venv setup-postgres setup-vscode minikube-setup minikube-clean minikube-status clean clean-postgres docker-build docker-run docker-stop docker-clean
 
 # Main development setup target
 dev-setup: install-system-deps install-uv sync-deps setup-postgres setup-vscode
@@ -175,3 +175,28 @@ clean: clean-postgres docker-clean
 	@echo "Cleaning up development environment..."
 	@rm -rf .venv
 	@rm -f .vscode/launch.json
+
+# Minikube targets
+minikube-setup:
+	@echo "Setting up Minikube development environment..."
+	@./.minikube/setup-minikube.sh
+
+minikube-status:
+	@echo "Checking Minikube status..."
+	@./.minikube/setup-minikube.sh status
+
+minikube-clean:
+	@echo "Cleaning up Minikube environment..."
+	@if command -v minikube >/dev/null 2>&1; then \
+		profile_exists=$$(minikube profile list 2>/dev/null | grep -c "dev-template-env" || echo "0"); \
+		if [ "$$profile_exists" -gt 0 ]; then \
+			echo "Stopping and deleting profile 'dev-template-env'..."; \
+			minikube stop --profile=dev-template-env 2>/dev/null || true; \
+			minikube delete --profile=dev-template-env 2>/dev/null || true; \
+			echo "Minikube profile 'dev-template-env' removed"; \
+		else \
+			echo "Profile 'dev-template-env' does not exist"; \
+		fi \
+	else \
+		echo "Minikube not found"; \
+	fi

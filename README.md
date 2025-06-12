@@ -15,12 +15,19 @@ This template provides a **pre-configured** Python development environment for *
 - **🤖 AI-assisted** - GitHub Copilot instructions for modern Python patterns
 - **⚡ Fast dependencies** - Uses `uv` for package management
 - **🐋 Production ready** - Multi-stage Docker builds included
+- **☸️ Kubernetes ready** - Minikube setup with isolated profile
 
 ## 📋 Prerequisites
 
 - **VS Code** (required)
 - **Python 3.13+**
 - **Container Engine** (Docker Desktop or Podman)
+- **Minikube** (optional, for Kubernetes development)
+
+### Optional Minikube Setup
+For Kubernetes development, install Minikube following the [official documentation](https://minikube.sigs.k8s.io/docs/start/?arch=%2Fmacos%2Farm64%2Fstable%2Fbinary+download).
+
+**Note**: Also ensure you have a container runtime (Docker Desktop or Podman) installed before using Minikube.
 
 ## 🚀 Quick Start
 
@@ -62,6 +69,7 @@ make docker-clean     # Remove production container and image
 ### Cleanup
 ```bash
 make clean           # Clean everything (postgres + docker + .venv + vscode configs)
+make minikube-clean  # Clean Minikube cluster and profile
 ```
 
 ## 🗄️ Database Connection
@@ -111,6 +119,59 @@ make docker-stop
 make docker-clean
 ```
 
+## ☸️ Minikube Development Environment
+
+### Setup Minikube Cluster
+```bash
+make minikube-setup   # Setup local Kubernetes cluster with profile 'dev-template-env'
+```
+Creates a local Kubernetes cluster with:
+- **Profile**: `dev-template-env`
+- **Driver**: Podman
+- **Container Runtime**: containerd
+- **Memory**: 4GB RAM
+- **CPUs**: 2 cores
+- **Disk**: 20GB
+- **Kubernetes Version**: v1.28.0
+- **Addons**: ingress, auto-pause, metrics-server, dashboard
+
+### Minikube Management
+```bash
+make minikube-status        # Check cluster status
+make minikube-fix-kubectl   # Fix kubectl connection issues
+make minikube-clean         # Delete cluster completely
+```
+
+### Minikube Cluster Features
+- **Project Isolation**: Uses dedicated profile `dev-template-env` (isolated from other projects)
+- **Auto-pause**: Automatically pauses when idle to save system resources
+- **Ingress Controller**: Enabled for local web application testing
+- **Metrics Server**: Available for resource monitoring
+- **Dashboard**: Access via `minikube dashboard --profile=dev-template-env`
+- **Smart Detection**: Script automatically detects existing profiles and their status
+
+### Minikube Cluster Details
+- **Profile Name**: `dev-template-env`
+- **Resource Allocation**: 2 CPUs, 4GB RAM, 20GB disk
+- **Prerequisites**: Requires Podman (or Docker) and Minikube installed
+- **Health Checks**: Automatic cluster health verification during setup
+
+### Complete Minikube Workflow
+```bash
+# Setup cluster
+make minikube-setup
+
+# Check status
+make minikube-status
+
+# Build and deploy (when ready)
+eval $(minikube docker-env --profile=dev-template-env)
+make docker-build
+
+# Clean up when done
+make minikube-clean
+```
+
 ## 📦 Adding Dependencies
 
 Add to `pyproject.toml` and run `make sync-deps`:
@@ -143,6 +204,8 @@ vscode-python-template/
 ├── 📄 Dockerfile                  # Production container
 ├── 📄 .dockerignore               # Docker build exclusions
 ├── 📄 README.md                   # This file
+├── 📁 .minikube/                  # Minikube configuration
+│   └── 📄 setup-minikube.sh       # Minikube setup script
 ├── 📁 launch_templates/           # VS Code configurations
 │   └── 📄 launch.example.json     # Debug/run configs
 └── 📁 .vscode/                    # Auto-generated VS Code settings
