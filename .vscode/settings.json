@@ -133,6 +133,23 @@
         "shellscript": true
     },
     "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "file": "./.github/instructions/interface-design.md"
+        },
+        {
+            "file": "./.github/instructions/logging-standards.md"
+        },
+        {
+            "file": "./.github/instructions/testing-standards.md"
+        },
+        {
+            "file": "./.github/instructions/web-development.md"
+        },
+        {
+            "file": "./.github/instructions/ai-behavior.md"
+        }
+    ],
     "github.copilot.advanced": {
         "useLanguageServer": true
     },

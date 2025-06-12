@@ -186,6 +186,46 @@ make docker-clean          # Clean up when done
 make clean                 # Removes everything: postgres, docker, .venv, vscode configs
 ```
 
+## 🤖 GitHub Copilot Custom Instructions
+
+This template includes **optimized GitHub Copilot custom instructions** following VS Code best practices with specialized instruction files.
+
+### 📋 Instruction Structure
+
+```
+.github/
+├── copilot-instructions.md          # Core Python 3.13+ standards
+└── instructions/
+    ├── ai-behavior.md               # AI interaction guidelines  
+    ├── interface-design.md          # Type system and generics
+    ├── logging-standards.md         # Logging and error handling
+    ├── testing-standards.md         # Test patterns and pytest
+    └── web-development.md           # API and architecture patterns
+```
+
+### ⚙️ How It Works
+
+- **Automatic loading**: Instructions are automatically applied via VS Code settings
+- **Specialized context**: Each file provides domain-specific knowledge 
+- **Better results**: Copilot gets focused context without information overload
+- **Team consistency**: Enforces modern Python patterns across all AI-generated code
+
+### 🚀 Key Features
+
+- **Modern Python 3.13+**: Built-in generics, `type` statements, comprehensive type hints
+- **Architecture patterns**: Protocol vs ABCMeta, dependency injection, domain-driven design
+- **Quality standards**: Structured logging, proper error handling, testing best practices
+- **AI behavior tuning**: Skeptical questioning, fact-based responses, pragmatic solutions
+
+### 📖 Usage
+
+1. **Install GitHub Copilot** extension in VS Code
+2. **Instructions auto-apply** - no additional setup needed
+3. **Start coding** - Copilot automatically follows all instruction patterns
+4. **Ask in chat** - Get context-aware responses like "create a repository class"
+
+> 📚 **Detailed documentation**: See [`.github/instructions/README.md`](.github/instructions/README.md) for complete instruction details.
+
 ## 📄 License
 
 MIT License
