@@ -92,6 +92,10 @@
     "[json]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
+    // YAML file lint settings
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
     // mutantdino.resourcemonitor settings
     "resmon.show.cputemp": true,
     // Files settings
@@ -153,5 +157,5 @@
     "github.copilot.advanced": {
         "useLanguageServer": true
     },
-    "github.copilot.editor.enableCodeActions": true
+    "github.copilot.editor.enableCodeActions": true,
 }

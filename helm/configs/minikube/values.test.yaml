@@ -1,0 +1,31 @@
+# Image configuration for local development
+image:
+  repository: localhost/python-template
+  tag: "latest"
+  pullPolicy: Never  # Use local images in minikube
+
+# Service configuration for local access
+service:
+  type: NodePort  # Easy access from host machine
+  port: 8080
+  targetPort: 8080
+
+# Reduced resource requirements for local development
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# Volume mounts for local development (example for hot-reload)
+# Uncomment and modify paths as needed:
+# volumeMounts:
+#   - name: app-code
+#     mountPath: /app
+#     readOnly: false
+# volumes:
+#   - name: app-code
+#     hostPath:
+#       path: /path/to/your/local/code

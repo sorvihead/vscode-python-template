@@ -1,4 +1,4 @@
-.PHONY: dev-setup install-system-deps install-uv sync-deps activate-venv setup-postgres setup-vscode minikube-setup minikube-clean minikube-status clean clean-postgres docker-build docker-run docker-stop docker-clean
+.PHONY: dev-setup install-system-deps install-uv sync-deps activate-venv setup-postgres setup-vscode minikube-setup minikube-clean minikube-status clean clean-postgres docker-build docker-run docker-stop docker-clean helm-deploy
 
 # Main development setup target
 dev-setup: install-system-deps install-uv sync-deps setup-postgres setup-vscode
@@ -200,3 +200,48 @@ minikube-clean:
 	else \
 		echo "Minikube not found"; \
 	fi
+
+# Helm deployment target
+helm-deploy: minikube-setup docker-build
+	@echo "Deploying to Minikube with Helm..."
+	@# Check if required tools are available
+	@if ! command -v helm >/dev/null 2>&1; then \
+		echo "Error: Helm not found. Please install Helm first."; \
+		exit 1; \
+	fi
+	@if ! command -v minikube >/dev/null 2>&1; then \
+		echo "Error: Minikube not found. Please install Minikube first."; \
+		exit 1; \
+	fi
+	@# Determine container engine
+	@if command -v podman >/dev/null 2>&1; then \
+		echo "Using podman for image operations"; \
+		CONTAINER_CMD=podman; \
+	elif command -v docker >/dev/null 2>&1; then \
+		echo "Using docker for image operations"; \
+		CONTAINER_CMD=docker; \
+	else \
+		echo "Error: Neither podman nor docker found. Please install one of them."; \
+		exit 1; \
+	fi; \
+	echo "Saving image to tarfile..."; \
+	$$CONTAINER_CMD save python-template:latest -o python-template.tar; \
+	echo "Loading image into Minikube..."; \
+	minikube image load python-template.tar --profile=dev-template-env; \
+	$$CONTAINER_CMD tag python-template:latest localhost/python-template:latest 2>/dev/null || true; \
+	echo "Removing temporary tarfile..."; \
+	rm -f python-template.tar; \
+	echo "Deploying with Helm..."; \
+	helm upgrade project-template helm/ \
+		--install \
+		--debug \
+		--values=helm/configs/minikube/values.test.yaml; \
+	echo ""; \
+	echo "🎉 Deployment complete!"; \
+	echo ""; \
+	echo "To access your application:"; \
+	echo "1. Get the NodePort: kubectl get svc project-template -o jsonpath='{.spec.ports[0].nodePort}'"; \
+	echo "2. Get Minikube IP: minikube ip --profile=dev-template-env"; \
+	echo "3. Access at: http://<minikube-ip>:<nodeport>"; \
+	echo ""; \
+	echo "Or use port-forward: kubectl port-forward svc/project-template 8080:8080"

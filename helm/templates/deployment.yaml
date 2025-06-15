@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "project-template.fullname" . }}
+  annotations:
+    description: {{ .Chart.Description }}
+  labels:
+    app: {{ template "project-template.fullname" . }}
+    version: {{ .Values.image.tag | quote }}
+    chart: {{ template "project-template.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "project-template.fullname" . }}
+      release: {{ .Release.Name | quote }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+    {{- with .Values.rollingUpdate }}
+        {{- toYaml . | nindent 6 }}
+    {{- end }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "project-template.fullname" . }}
+        release: {{ .Release.Name | quote }}
+        app.kubernetes.io/name: {{ include "project-template.fullname" . }}
+        app.kubernetes.io/version: {{ .Chart.Version }}
+    spec:
+      containers:
+        - name: {{ template "project-template.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.targetPort }}
+              protocol: TCP
+        # temporary probes while there is no API
+          livenessProbe:
+            exec:
+              command:
+                - "/bin/bash"
+                - "-c"
+                - "ps aux | grep bash | grep -v grep"
+            initialDelaySeconds: 10
+            periodSeconds: 30

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "project-template.fullname" . }}
+  annotations:
+    description: {{ .Chart.Description }}
+  labels:
+    app: {{ template "project-template.fullname" . }}
+    version: {{ .Values.image.tag | quote }}
+    chart: {{ template "project-template.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "project-template.fullname" . }}
+    release: {{ .Release.Name | quote }}

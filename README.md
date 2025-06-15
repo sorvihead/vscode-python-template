@@ -66,6 +66,14 @@ make docker-stop      # Stop production container
 make docker-clean     # Remove production container and image
 ```
 
+### Kubernetes with Minikube
+```bash
+make minikube-setup   # Setup isolated Minikube cluster (profile: dev-template-env)
+make helm-deploy      # Build image, load to Minikube, deploy with Helm
+make minikube-status  # Check cluster status
+make minikube-clean   # Clean Minikube cluster and profile
+```
+
 ### Cleanup
 ```bash
 make clean           # Clean everything (postgres + docker + .venv + vscode configs)
@@ -142,6 +150,22 @@ make minikube-fix-kubectl   # Fix kubectl connection issues
 make minikube-clean         # Delete cluster completely
 ```
 
+### Deploy with Helm
+```bash
+make helm-deploy           # Build image, load to Minikube, and deploy with Helm
+```
+This command performs a complete deployment workflow:
+1. **Prerequisites**: Ensures Minikube is running and Docker image is built
+2. **Image Export**: Saves Docker image to tarfile
+3. **Image Load**: Loads image into Minikube cluster
+4. **Cleanup**: Removes temporary tarfile
+5. **Helm Deploy**: Deploys application using Helm with Minikube-specific values
+
+After deployment, access your application:
+- **Get service info**: `kubectl get svc project-template`
+- **Port forward**: `kubectl port-forward svc/project-template 8080:8080`
+- **Access**: http://localhost:8080
+
 ### Minikube Cluster Features
 - **Project Isolation**: Uses dedicated profile `dev-template-env` (isolated from other projects)
 - **Auto-pause**: Automatically pauses when idle to save system resources
@@ -149,6 +173,60 @@ make minikube-clean         # Delete cluster completely
 - **Metrics Server**: Available for resource monitoring
 - **Dashboard**: Access via `minikube dashboard --profile=dev-template-env`
 - **Smart Detection**: Script automatically detects existing profiles and their status
+
+## 📊 Helm Chart
+
+The project includes a simplified Helm chart for Kubernetes deployment:
+
+### Chart Structure
+```
+helm/
+├── Chart.yaml                    # Chart metadata
+├── values.yaml                   # Default configuration
+├── configs/
+│   └── minikube/
+│       └── values.test.yaml     # Minikube-specific overrides
+└── templates/
+    ├── _helpers.tpl             # Template helpers
+    ├── deployment.yaml          # Application deployment
+    └── service.yaml             # Service definition
+```
+
+### Key Features
+- **Simplified Configuration**: Essential settings only, optimized for local development
+- **Health Checks**: Process-based liveness probes (temporary, until API is implemented)
+- **Resource Management**: CPU and memory limits configured
+- **Local Development**: Minikube-specific values with reduced resource requirements
+- **Flexible Image**: Configurable repository and tag via values
+
+### Helm Configuration
+```yaml
+# Default values (values.yaml)
+image:
+  repository: python-template
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Minikube overrides (configs/minikube/values.test.yaml)  
+image:
+  repository: localhost/python-template
+  tag: "latest"
+  pullPolicy: Never  # Use local images
+```
+
+### Manual Helm Commands
+```bash
+# Deploy manually
+helm upgrade project-template helm/ \
+  --install \
+  --values=helm/configs/minikube/values.test.yaml
+
+# Check status
+helm status project-template
+
+# Uninstall
+helm uninstall project-template
+```
 
 ### Minikube Cluster Details
 - **Profile Name**: `dev-template-env`

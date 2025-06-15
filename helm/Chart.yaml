@@ -1,0 +1,7 @@
+apiVersion: v2
+name: project-template
+description: Project Tempalte
+version: 0.1.0
+maintainers:
+  - name: Novoidarskii Pavel
+    email: sorvihead1@gmail.com

@@ -1,0 +1,43 @@
+# Image configuration
+image:
+  repository: python-template
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+# Deployment configuration
+deployment:
+  replicaCount: 1
+
+# Resource limits and requests
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    memory: 128Mi
+
+# Readiness probe configuration for Kubernetes
+readinessProbe:
+  httpGet:
+    path: /manage/health # Path to check service health
+    port: http # Port to use for health check
+  initialDelaySeconds: 10 # Delay before probe starts
+  periodSeconds: 30 # Frequency of probe
+  successThreshold: 1
+  failureThreshold: 10
+  timeoutSeconds: 30 # Timeout for each probe
+
+# Liveness probe configuration for Kubernetes
+livenessProbe:
+  httpGet:
+    path: /manage/health # Path to check service health
+    port: http # Port to use for health check
+  initialDelaySeconds: 60 # Delay before probe starts
+  timeoutSeconds: 30 # Timeout for each probe
+  failureThreshold: 10
+  periodSeconds: 30 # Frequency of probe
